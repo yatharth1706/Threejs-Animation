@@ -25,18 +25,13 @@
 		document.body.appendChild(renderer.domElement);
 
 
-		var geometry = new THREE.ConeGeometry();
+		var geometry = new THREE.CubeGeometry();
 		var colour = new THREE.Color("hsl(0, 100%, 50%)");
-		var material = new THREE.MeshBasicMaterial({color: colour });
+		var material = new THREE.MeshNormalMaterial({color: colour });
 
 		var cube = new THREE.Mesh(geometry, material);
 
 		scene.add(cube);
-		camera.position.z = 5;
-
-		
-		
-		// renderer.render(scene, camera);
 
 		function animate(){
 			requestAnimationFrame(animate);
@@ -48,6 +43,32 @@
 		}
 
 		animate();
+		
+		// lets add line
+
+		
+		var material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+		
+		// lets create some vertices to make a line
+		var points = []
+		points.push(new THREE.Vector3(-10,0,0));
+		points.push(new THREE.Vector3(0,10,0));
+		points.push(new THREE.Vector3(10,0,0));
+
+		// connect all adjacent pairs using bufferGeometry
+
+		var connect = new THREE.BufferGeometry().setFromPoints(points);
+
+		// call line mesh
+		var completeline = new THREE.Line(connect, material);
+
+		// add it to the scene so that it is visible
+
+		scene.add(completeline); 
+
+		camera.position.set(0,0,3);
+		camera.lookAt(0,0,0);
+
 
 	</script>
 </body>
