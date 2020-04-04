@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Practicing Three js</title>
+	<style>
+		body { margin: 0; }
+		canvas { display: block; }
+	</style>
+
+
+</head>
+<body>
+	<script src="https://threejs.org/build/three.js"></script>
+	<script>
+		
+		// three necessary things
+		// 1. Scene 2. Camera 3. Renderer
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+
+		document.body.appendChild(renderer.domElement);
+
+
+		var geometry = new THREE.ConeGeometry();
+		var colour = new THREE.Color("hsl(0, 100%, 50%)");
+		var material = new THREE.MeshBasicMaterial({color: colour });
+
+		var cube = new THREE.Mesh(geometry, material);
+
+		scene.add(cube);
+		camera.position.z = 5;
+
+		
+		
+		// renderer.render(scene, camera);
+
+		function animate(){
+			requestAnimationFrame(animate);
+
+			cube.rotation.x += 0.01;
+			cube.rotation.y += 0.01;
+
+			renderer.render(scene, camera);
+		}
+
+		animate();
+
+	</script>
+</body>
+</html>
