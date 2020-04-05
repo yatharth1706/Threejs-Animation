@@ -17,12 +17,17 @@
 			left: 47%;
 		}
 
-		#btn3{
+		#interact{
 			position: absolute;
 			top: 80%;
 			left: 47%;
 		}
 
+		input{
+			position: absolute;
+			top: 70%;
+			left: 47%;	
+		}
 	</style>
 	
 
@@ -30,14 +35,16 @@
 
 <body>
 	<button id = "btn1">Play Sound</button>
-	<button id = "btn2">Pause Sound</button>
-	<button id = "btn3">Gain</button>
+	<button id = "interact">Play Music</button>
+
+	<input type="range" min=-10  max=10 name="playback" id="playback">
+
 	<script src="https://threejs.org/build/three.js"></script>
 	
 	<script>
 		var btn = document.querySelector("#btn1");
-		var btn1 = document.querySelector("#btn2");
-		var btn2 = document.querySelector("#btn3");
+		var playback = document.querySelector("#playback");
+		var interact = document.querySelector("#interact");
 		// three necessary things 1. Scene 2. Camera 3. Renderer
 		
 		// Create scene
@@ -108,35 +115,39 @@
 		// // another one is virtual sound which virtual listener is listening
 		// // then call audioloader to actually be able to load to the scene
 
-		var audioListener = new THREE.AudioListener();
+		var audioListener, sound, audioLoader, media;
 
-		var sound = new THREE.Audio(audioListener);
+		
 
-		var audioLoader = new THREE.AudioLoader();
+		interact.addEventListener('click', ()=>{
+			console.log("Interacting");
+			audioListener = new THREE.AudioListener();
 
-		audioLoader.load('sound/music1.mp3', function(buffer){
-				sound.setBuffer(buffer);
-				sound.setLoop(true);
-				sound.setVolume(0.5);
-				sound.play(); 	
-				sound.detune =1100;
-				// sound.panner = 1;
-				// sound.setFilter( {detune:300 });
-		});
+			sound = new THREE.Audio(audioListener);
 
-		var analyzer = new THREE.AudioAnalyser(sound,32);
+			mediaElement = new Audio( 'sound/music1.mp3' );
+			mediaElement.loop = true;
+			mediaElement.play();
+
+			sound.setMediaElementSource( mediaElement );
+			
+			console.log(mediaElement.isPlaying);
+		})
 
 
 		btn.addEventListener('click', function(){
-			sound.play();
+			if(sound.isPlaying == true){
+				sound.pause();
+			}else{
+				sound.play();
+			}
+			
 		})
 
-		btn1.addEventListener('click', function(){
-			sound.pause();
-		})
-
-		btn2.addEventListener('click', function(){
-			console.log(analyzer.getAverageFrequency());
+		playback.addEventListener('input', function(){
+			sound.setPlaybackRate(this.value);
+			console.log('clicked')
+			// sound.play();
 		})
 
 		var geometry = new THREE.BufferGeometry();
@@ -161,6 +172,7 @@
 		var Yesmesh = new THREE.Mesh( geometry, material )
 		Yesmesh.position.set(10,0,0);
 		scene.add(Yesmesh);
+
 
 		
 	</script>
