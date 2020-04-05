@@ -6,16 +6,41 @@
 	<style>
 		body { margin: 0; }
 		canvas { display: block; }
-	</style>
+		#btn1{
+			position: absolute;
+			top: 60%;
+			left: 47%;
+		}
+		#btn2{
+			position: absolute;
+			top: 70%;
+			left: 47%;
+		}
 
+		#btn3{
+			position: absolute;
+			top: 80%;
+			left: 47%;
+		}
+
+	</style>
+	
 
 </head>
+
 <body>
+	<button id = "btn1">Play Sound</button>
+	<button id = "btn2">Pause Sound</button>
+	<button id = "btn3">Gain</button>
 	<script src="https://threejs.org/build/three.js"></script>
+	
 	<script>
+		var btn = document.querySelector("#btn1");
+		var btn1 = document.querySelector("#btn2");
+		var btn2 = document.querySelector("#btn3");
+		// three necessary things 1. Scene 2. Camera 3. Renderer
 		
-		// three necessary things
-		// 1. Scene 2. Camera 3. Renderer
+		// Create scene
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
 
@@ -25,17 +50,26 @@
 		document.body.appendChild(renderer.domElement);
 
 
-		var geometry = new THREE.CubeGeometry();
-		var colour = new THREE.Color("hsl(0, 100%, 50%)");
-		var material = new THREE.MeshNormalMaterial({color: colour });
+	
 
-		var cube = new THREE.Mesh(geometry, material);
+		// create shape
+		// var geometry = new THREE.CubeGeometry();
+		// var colour = new THREE.Color("hsl(0, 100%, 50%)");
+		// var material = new THREE.MeshNormalMaterial({color: colour });
 
+		// var cube = new THREE.Mesh(geometry, material);
+
+		// scene.add(cube);
+
+		// animate with rotation
+		var geometry1 = new THREE.BoxGeometry(1,1,1);
+		var material1 = new THREE.MeshPhongMaterial({color: 0xFFFF00});
+		var cube = new THREE.Mesh(geometry1, material1);
+		cube.position.set(-10,0,0);
 		scene.add(cube);
 
 		function animate(){
 			requestAnimationFrame(animate);
-
 			cube.rotation.x += 0.01;
 			cube.rotation.y += 0.01;
 
@@ -44,16 +78,14 @@
 
 		animate();
 		
-		// lets add line
-
 		
 		var material = new THREE.LineBasicMaterial({ color: 0xff0000 });
 		
 		// lets create some vertices to make a line
 		var points = []
-		points.push(new THREE.Vector3(-10,0,0));
-		points.push(new THREE.Vector3(0,10,0));
-		points.push(new THREE.Vector3(10,0,0));
+		points.push(new THREE.Vector3(-3,0,0));
+		points.push(new THREE.Vector3(0,3,0));
+		points.push(new THREE.Vector3(3,0,0));
 
 		// connect all adjacent pairs using bufferGeometry
 
@@ -63,13 +95,74 @@
 		var completeline = new THREE.Line(connect, material);
 
 		// add it to the scene so that it is visible
-
+		// completeline.position(2,0,0);
 		scene.add(completeline); 
 
-		camera.position.set(0,0,3);
+		camera.position.set(0,0,20);
 		camera.lookAt(0,0,0);
 
 
+		// // lets add audio
+		// // three things necessary listener which is like a virtual listener
+		// // add this listener to camera
+		// // another one is virtual sound which virtual listener is listening
+		// // then call audioloader to actually be able to load to the scene
+
+		var audioListener = new THREE.AudioListener();
+
+		var sound = new THREE.Audio(audioListener);
+
+		var audioLoader = new THREE.AudioLoader();
+
+		audioLoader.load('sound/music1.mp3', function(buffer){
+				sound.setBuffer(buffer);
+				sound.setLoop(true);
+				sound.setVolume(0.5);
+				sound.play(); 	
+				sound.detune =1100;
+				// sound.panner = 1;
+				// sound.setFilter( {detune:300 });
+		});
+
+		var analyzer = new THREE.AudioAnalyser(sound,32);
+
+
+		btn.addEventListener('click', function(){
+			sound.play();
+		})
+
+		btn1.addEventListener('click', function(){
+			sound.pause();
+		})
+
+		btn2.addEventListener('click', function(){
+			console.log(analyzer.getAverageFrequency());
+		})
+
+		var geometry = new THREE.BufferGeometry();
+		// create a simple square shape. We duplicate the top left and bottom right
+		
+		// vertices because each vertex needs to appear once per triangle.
+		var light = new THREE.AmbientLight( 0xffff00 ); // soft white light
+		scene.add( light );
+		var vertices = new Float32Array( [
+			-1.0, -1.0,  1.0,
+			 1.0, -1.0,  1.0,
+			 1.0,  1.0,  1.0,
+
+			 1.0,  1.0,  1.0,
+			-1.0,  1.0,  1.0,
+			-1.0, -1.0,  1.0
+		] );
+
+		// itemSize = 3 because there are 3 values (components) per vertex
+		geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+		var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+		var Yesmesh = new THREE.Mesh( geometry, material )
+		Yesmesh.position.set(10,0,0);
+		scene.add(Yesmesh);
+
+		
 	</script>
 </body>
 </html>
