@@ -69,16 +69,16 @@
 		// scene.add(cube);
 
 		// animate with rotation
-		var geometry1 = new THREE.BoxGeometry(1,1,1);
-		var material1 = new THREE.MeshPhongMaterial({color: 0xFFFF00});
-		var cube = new THREE.Mesh(geometry1, material1);
-		cube.position.set(-10,0,0);
-		scene.add(cube);
+		// var geometry1 = new THREE.BoxGeometry(1,1,1);
+		// var material1 = new THREE.MeshPhongMaterial({color: 0xFFFF00});
+		// var cube = new THREE.Mesh(geometry1, material1);
+		// cube.position.set(-10,0,0);
+		// scene.add(cube);
 
 		function animate(){
 			requestAnimationFrame(animate);
-			cube.rotation.x += 0.01;
-			cube.rotation.y += 0.01;
+			// cube.rotation.x += 0.01;
+			// cube.rotation.y += 0.01;
 
 			renderer.render(scene, camera);
 		}
@@ -118,20 +118,21 @@
 		var audioListener, sound, audioLoader, media;
 
 		
-
 		interact.addEventListener('click', ()=>{
 			console.log("Interacting");
 			audioListener = new THREE.AudioListener();
 
 			sound = new THREE.Audio(audioListener);
 
-			mediaElement = new Audio( 'sound/music1.mp3' );
-			mediaElement.loop = true;
-			mediaElement.play();
 
-			sound.setMediaElementSource( mediaElement );
+			audioLoader = new THREE.AudioLoader()
+			audioLoader.load('sound/music1.mp3', function(buffer){
+				sound.setBuffer(buffer);
+				sound.setLoop = true;
+				sound.play();
+			});
 			
-			console.log(mediaElement.isPlaying);
+			console.log(sound.isPlaying);
 		})
 
 
@@ -174,7 +175,25 @@
 		scene.add(Yesmesh);
 
 
-		
+		// lets play with some shapes
+		geometry = new THREE.Geometry();
+
+		geometry.vertices.push(
+			new THREE.Vector3(-10,10,10),
+			new THREE.Vector3(-10,-10,10),
+			new THREE.Vector3(-10,-10,10)
+
+		);
+
+		geometry.faces.push( new THREE.Face3(0,1,2) );
+
+		geometry.computeBoundingSphere();
+		var material2 = new THREE.MeshPhongMaterial();
+
+		var meshTemp = new THREE.Mesh(geometry, material2);
+		// scene.add(meshTemp);
+		meshTemp.position.set(0,4,4);
+		camera.position.set(6,0,50);
 	</script>
 </body>
 </html>
