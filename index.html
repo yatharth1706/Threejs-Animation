@@ -5,7 +5,9 @@
 	<title>Practicing Three js</title>
 	<style>
 		body { margin: 0; }
-		canvas { display: block; }
+		canvas { 
+			display: block; 
+		}
 		#btn1{
 			position: absolute;
 			top: 60%;
@@ -34,6 +36,7 @@
 </head>
 
 <body>
+	<canvas></canvas>
 	<button id = "btn1">Play Sound</button>
 	<button id = "interact">Play Music</button>
 
@@ -42,6 +45,7 @@
 	<script src="https://threejs.org/build/three.js"></script>
 	
 	<script>
+		var canvas = document.querySelector("canvas");
 		var btn = document.querySelector("#btn1");
 		var playback = document.querySelector("#playback");
 		var interact = document.querySelector("#interact");
@@ -49,71 +53,43 @@
 		
 		// Create scene
 		var scene = new THREE.Scene();
-		var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+		var camera = new THREE.PerspectiveCamera(75,2,0.1,5);
 
-		var renderer = new THREE.WebGLRenderer();
-		renderer.setSize(window.innerWidth, window.innerHeight);
+		var renderer = new THREE.WebGLRenderer({canvas});
 
-		document.body.appendChild(renderer.domElement);
+		// add some lighting
+		{
+		    const color = 0xFFFFFF;
+		    const intensity = 1;
+		    const light = new THREE.DirectionalLight(color, intensity);
+		    light.position.set(-1, 2, 4);
+		    scene.add(light);
+		}
+
+		// add rotating cube
+		var geometry1 = new THREE.BoxGeometry(1,1,1);
+		var material1 = new THREE.MeshBasicMaterial({color: 0x44aa88 });
+		var cube = new THREE.Mesh(geometry1, material1);
+		scene.add(cube);
+		
+
+
+		function render(time) {
+		  time *= 0.001;  // convert time to seconds
+		 
+		  cube.rotation.x = time;
+		  cube.rotation.y = time;
+		 
+		  renderer.render(scene, camera);
+		 
+		  requestAnimationFrame(render);
+		}
+		requestAnimationFrame(render);
+		
+		
 
 
 	
-
-		// create shape
-		// var geometry = new THREE.CubeGeometry();
-		// var colour = new THREE.Color("hsl(0, 100%, 50%)");
-		// var material = new THREE.MeshNormalMaterial({color: colour });
-
-		// var cube = new THREE.Mesh(geometry, material);
-
-		// scene.add(cube);
-
-		// animate with rotation
-		// var geometry1 = new THREE.BoxGeometry(1,1,1);
-		// var material1 = new THREE.MeshPhongMaterial({color: 0xFFFF00});
-		// var cube = new THREE.Mesh(geometry1, material1);
-		// cube.position.set(-10,0,0);
-		// scene.add(cube);
-
-		function animate(){
-			requestAnimationFrame(animate);
-			// cube.rotation.x += 0.01;
-			// cube.rotation.y += 0.01;
-
-			renderer.render(scene, camera);
-		}
-
-		animate();
-		
-		
-		var material = new THREE.LineBasicMaterial({ color: 0xff0000 });
-		
-		// lets create some vertices to make a line
-		var points = []
-		points.push(new THREE.Vector3(-3,0,0));
-		points.push(new THREE.Vector3(0,3,0));
-		points.push(new THREE.Vector3(3,0,0));
-
-		// connect all adjacent pairs using bufferGeometry
-
-		var connect = new THREE.BufferGeometry().setFromPoints(points);
-
-		// call line mesh
-		var completeline = new THREE.Line(connect, material);
-
-		// add it to the scene so that it is visible
-		// completeline.position(2,0,0);
-		scene.add(completeline); 
-
-		camera.position.set(0,0,20);
-		camera.lookAt(0,0,0);
-
-
-		// // lets add audio
-		// // three things necessary listener which is like a virtual listener
-		// // add this listener to camera
-		// // another one is virtual sound which virtual listener is listening
-		// // then call audioloader to actually be able to load to the scene
 
 		var audioListener, sound, audioLoader, media;
 
@@ -151,49 +127,7 @@
 			// sound.play();
 		})
 
-		var geometry = new THREE.BufferGeometry();
-		// create a simple square shape. We duplicate the top left and bottom right
-		
-		// vertices because each vertex needs to appear once per triangle.
-		var light = new THREE.AmbientLight( 0xffff00 ); // soft white light
-		scene.add( light );
-		var vertices = new Float32Array( [
-			-1.0, -1.0,  1.0,
-			 1.0, -1.0,  1.0,
-			 1.0,  1.0,  1.0,
-
-			 1.0,  1.0,  1.0,
-			-1.0,  1.0,  1.0,
-			-1.0, -1.0,  1.0
-		] );
-
-		// itemSize = 3 because there are 3 values (components) per vertex
-		geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-		var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-		var Yesmesh = new THREE.Mesh( geometry, material )
-		Yesmesh.position.set(10,0,0);
-		scene.add(Yesmesh);
-
-
-		// lets play with some shapes
-		geometry = new THREE.Geometry();
-
-		geometry.vertices.push(
-			new THREE.Vector3(-10,10,10),
-			new THREE.Vector3(-10,-10,10),
-			new THREE.Vector3(-10,-10,10)
-
-		);
-
-		geometry.faces.push( new THREE.Face3(0,1,2) );
-
-		geometry.computeBoundingSphere();
-		var material2 = new THREE.MeshPhongMaterial();
-
-		var meshTemp = new THREE.Mesh(geometry, material2);
-		// scene.add(meshTemp);
-		meshTemp.position.set(0,4,4);
-		camera.position.set(6,0,50);
+	
 	</script>
 </body>
 </html>
