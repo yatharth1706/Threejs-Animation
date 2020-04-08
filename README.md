@@ -14,6 +14,7 @@
 	Three js actually uses WEBGL to draw 3D objects.
 
 <p align="center"><h3>Basic Structure of Threejs</h3></p>
+
 ![Structure of Threejs](https://threejsfundamentals.org/threejs/lessons/resources/images/threejs-structure.svg)
 
 	1. Scene :- Its like a virtual world where you will create animation objects
