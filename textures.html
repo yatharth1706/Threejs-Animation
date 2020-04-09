@@ -37,12 +37,18 @@
 		const loader = new THREE.TextureLoader();
 		// Now we will create a box to have our texture onto it
 		const boxGeometry = new THREE.BoxBufferGeometry(2,2,2);
-		const boxMaterial = new THREE.MeshBasicMaterial({
-			map: loader.load('https://lh3.googleusercontent.com/6VLm5hjgluGEwjnhaD3BO1A1nSWO9aJSPdW61hbTM0jhjnYFYzubHc2quHPEGf1v0u0=rw')
-			
-		})
+		
 
-		const box = new THREE.Mesh(boxGeometry, boxMaterial);
+		const materials = [
+			new THREE.MeshBasicMaterial({map: loader.load('images/back.jpg')}),
+			new THREE.MeshBasicMaterial({map: loader.load('images/blueflame.png')}),
+			new THREE.MeshBasicMaterial({map: loader.load('images/dog.jpg')}),
+			new THREE.MeshBasicMaterial({map: loader.load('images/rider2.jpg')}),
+			new THREE.MeshBasicMaterial({map: loader.load('images/dragon.jfif')}),
+			new THREE.MeshBasicMaterial({map: loader.load('images/soldier.jpg')})
+		];
+
+		const box = new THREE.Mesh(boxGeometry, materials);
 		scene.add(box);
 
 		// create resize function
