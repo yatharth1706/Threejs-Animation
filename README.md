@@ -6,15 +6,16 @@
 
 ### Learning Resources
 
-	* Documentation is available here [documentation](https://threejs.org/)
-	* https://threejsfundamentals.org/
+* Documentation is available here [documentation](https://threejs.org/)
+* https://threejsfundamentals.org/
 
 #### Notes:
 
 	Three js actually uses WEBGL to draw 3D objects.
 
-	Basic Structure of Threejs
-	![Structure of Threejs](https://threejsfundamentals.org/threejs/lessons/resources/images/threejs-structure.svg)
+<p align="center"><h3>Basic Structure of Threejs</h3></p>
+
+![Structure of Threejs](https://threejsfundamentals.org/threejs/lessons/resources/images/threejs-structure.svg)
 
 	1. Scene :- Its like a virtual world where you will create animation objects
 	2. Camera :- Its like a virtual camera which will be able to see virtual scene that we will create
