@@ -36,7 +36,8 @@
 
 		// now lets create a small geometry
 		const sphere = new THREE.SphereGeometry(3,30,30);
-		const sphereMaterial = new THREE.MeshPhongMaterial({color: 0xFFFFFF, emissive: 0xFFFF00});
+		const sphereMaterial = new THREE.MeshPhongMaterial({color: 0xFFFFFF, emissive: 0xFFFF00, flatShading: true});
+		sphereMaterial.needsUpdate = true;
 		const mesh = new THREE.Mesh(sphere, sphereMaterial);
 
 		scene.add(mesh);
