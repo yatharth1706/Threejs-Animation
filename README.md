@@ -23,3 +23,8 @@
 	4. Material :- Colour or texture
 	5. Mesh: Combiner of material with geometry.
 	6. Geometry: Any particular shape.
+
+
+#### Textures
+	
+	Textures take width * height * 4 * 1.33 bytes of memory.
