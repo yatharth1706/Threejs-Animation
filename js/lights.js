@@ -55,6 +55,11 @@ scene.add(planeMesh);
     scene.add(mesh);
   }
 
+// lets add lighting in a room
+const color = 0xFFFFFF;
+const intensity = 1;
+const light = new THREE.AmbientLight(color, intensity);
+scene.add(light);
 
 // lets add orbit controls
 const controls = new THREE.OrbitControls(camera, render.domElement);
@@ -68,7 +73,22 @@ controls.update();
 // but the resolution is not good for that we will do some stuff
 
 
+class ColorGUIHelper {
+    constructor(object, prop) {
+      this.object = object;
+      this.prop = prop;
+    }
+    get value() {
+      return `#${this.object[this.prop].getHexString()}`;
+    }
+    set value(hexString) {
+      this.object[this.prop].set(hexString);
+    }
+  }
 
+  const gui = new dat.GUI();
+gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
+gui.add(light, 'intensity', 0, 2, 0.01);
 
 
 function needResize(){
