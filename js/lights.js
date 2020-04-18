@@ -11,19 +11,65 @@ const camera = new THREE.PerspectiveCamera(fov,aspect,near,far);
 
 const renderer = new THREE.WebGLRenderer({canvas});
 
-// now we will create a rotating box which 
-// need three things geometry, material and mesh to combine
+// first we will create a plane
+const planeSize = 40;
 
-const geometry = new THREE.BoxGeometry(2,2,2);
-const material = new THREE.MeshBasicMaterial({color: 0xFFFF00 })
-const cube = new THREE.Mesh(geometry, material)
+// create one texture to embed on plane
+const loader = new THREE.TextureLoader();
+const texture = loader.load('https://threejsfundamentals.org/threejs/resources/images/checker.png');
 
-scene.add(cube);
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+texture.magFilter = THREE.NearestFilter;
+const repeats = planeSize / 2;
+texture.repeat.set(repeats, repeats);
+
+// now create a plane geometry
+const plane = new THREE.PlaneBufferGeometry(planeSize,planeSize);
+const material = new THREE.MeshPhongMaterial({
+    map: texture,
+    side: THREE.DoubleSide
+})
+
+const planeMesh = new THREE.Mesh(plane,material);
+planeMesh.rotation.x = Math.PI * -.5;
+scene.add(planeMesh);
+
+// lets add cube and sphere
+{
+    const cubeSize = 4;
+    const cubeGeo = new THREE.BoxBufferGeometry(cubeSize, cubeSize, cubeSize);
+    const cubeMat = new THREE.MeshPhongMaterial({color: '#8AC'});
+    const mesh = new THREE.Mesh(cubeGeo, cubeMat);
+    mesh.position.set(cubeSize + 1, cubeSize / 2, 0);
+    scene.add(mesh);
+  }
+  {
+    const sphereRadius = 3;
+    const sphereWidthDivisions = 32;
+    const sphereHeightDivisions = 16;
+    const sphereGeo = new THREE.SphereBufferGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions);
+    const sphereMat = new THREE.MeshPhongMaterial({color: '#CA8'});
+    const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+    mesh.position.set(-sphereRadius - 1, sphereRadius + 2, 0);
+    scene.add(mesh);
+  }
+
+
+// lets add orbit controls
+const controls = new THREE.OrbitControls(camera, render.domElement);
+
+
 // set the position of camera
-camera.position.set(0,0,10);
-camera.lookAt(0,0,0);
-
+camera.position.set(0,10,20);
+// after every changing of position controls should be updated
+controls.target.set(0, 5, 0);
+controls.update();
 // but the resolution is not good for that we will do some stuff
+
+
+
+
 
 function needResize(){
     const canvas = renderer.domElement;
@@ -37,18 +83,15 @@ function needResize(){
 }
 
 function render(time){
-    time *= 0.001;
-
-    if(needResize()){
+    if (needResize()) {
         const canvas = renderer.domElement;
-        // update camera aspect
-        camera.aspect = canvas.clientWidth/canvas.clientHeight;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
         camera.updateProjectionMatrix();
-    }
-    cube.rotation.x = time;
-    cube.rotation.y = time;
-    renderer.render(scene, camera);
-    requestAnimationFrame(render);
+      }
+  
+      renderer.render(scene, camera);
+  
+      requestAnimationFrame(render);
 }
 
 requestAnimationFrame(render);
