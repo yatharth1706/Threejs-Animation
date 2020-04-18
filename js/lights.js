@@ -56,9 +56,10 @@ scene.add(planeMesh);
   }
 
 // lets add lighting in a room
-const color = 0xFFFFFF;
+const skyColor = 0xB1E1FF;  // light blue
+const groundColor = 0xB97A20;  // brownish orange
 const intensity = 1;
-const light = new THREE.AmbientLight(color, intensity);
+const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
 scene.add(light);
 
 // lets add orbit controls
@@ -87,9 +88,10 @@ class ColorGUIHelper {
   }
 
   const gui = new dat.GUI();
-gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
-gui.add(light, 'intensity', 0, 2, 0.01);
 
+gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('skyColor');
+gui.addColor(new ColorGUIHelper(light, 'groundColor'), 'value').name('groundColor');
+gui.add(light, 'intensity', 0, 2, 0.01);
 
 function needResize(){
     const canvas = renderer.domElement;
