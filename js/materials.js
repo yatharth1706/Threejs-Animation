@@ -1,4 +1,4 @@
-var canvas = document.querySelector("#c");
+        var canvas = document.querySelector("#c");
 		// creating scene,camera and renderer
 		const scene = new THREE.Scene();
 		const fov = 45;

@@ -28,3 +28,7 @@
 #### Textures
 	
 	Textures take width * height * 4 * 1.33 bytes of memory.
+
+#### OrbitControls
+
+Orbit controls allow the camera to orbit around a target.
